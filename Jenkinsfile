@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('TodoApp') {
+                dir('package.json') {
                   bat 'npm install'
                   bat 'npm run build'
               }
