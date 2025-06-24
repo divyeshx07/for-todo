@@ -10,9 +10,10 @@ pipeline {
 
         stage('Build') {
             steps {
-                // If package.json is in a subfolder, use `dir('subfolder')` here
-                bat 'npm install'
-                bat 'npm run build'
+                dir('package.json') {
+                    bat 'npm install'
+                    bat 'npm run build'
+                }
             }
         }
 
