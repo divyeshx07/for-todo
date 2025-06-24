@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        dotnet 'dotnet-9' // Make sure this matches the label under "Global Tool Configuration"
+        dotnet 'dotnet-8' // Make sure this matches the label under "Global Tool Configuration"
     }
 
     stages {
