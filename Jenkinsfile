@@ -1,9 +1,8 @@
 pipeline {
     agent any
 
-    environment {
-        DOTNET_ROOT = "${tool 'dotnet-9'}"
-        PATH = "${env.DOTNET_ROOT};${env.PATH}"
+    tools {
+        dotnet 'dotnet-9' // Make sure this matches the label under "Global Tool Configuration"
     }
 
     stages {
