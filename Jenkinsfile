@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        DOTNET_ROOT = "${tool 'dotnet-9'}"
+        PATH = "${env.DOTNET_ROOT};${env.PATH}"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,20 +13,19 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Publish') {
             steps {
-                dir('TodoApi') {
-                    bat 'npm install'
-                    bat 'npm run build'
-                }
+                bat 'dotnet restore ToDoApp.sln'
+                bat 'dotnet build TodoApi/TodoApi.csproj --configuration Release'
+                bat 'dotnet publish TodoApi/TodoApi.csproj --configuration Release --output published'
             }
         }
 
         stage('Deploy to EC2') {
             steps {
                 sshagent(['ec2-ssh-key']) {
-                    bat 'scp -o StrictHostKeyChecking=no -r TodoApi/build ubuntu@<35.176.246.99>:/home/ubuntu/todoapp'
-                    bat 'ssh -o StrictHostKeyChecking=no ubuntu@<35.176.246.99> "cd /home/ubuntu/todoapp && npm install && npm start"'
+                    bat 'scp -o StrictHostKeyChecking=no -r published/* ubuntu@<35.176.246.99>:/home/ubuntu/todoapp'
+                    bat 'ssh -o StrictHostKeyChecking=no ubuntu@<35.176.246.99> "cd /home/ubuntu/todoapp && nohup dotnet TodoApi.dll > log.txt 2>&1 &"'
                 }
             }
         }
