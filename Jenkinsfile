@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        dotnet 'dotnet-8' // Make sure this matches the label under "Global Tool Configuration"
-    }
-
     stages {
         stage('Checkout') {
             steps {
