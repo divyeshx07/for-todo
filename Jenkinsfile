@@ -10,10 +10,11 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2') {
+         stage('Deploy to EC2') {
             steps {
-                bat 'scp -i C:\\Users\\pd550\\Downloads\\ssh-todo-key.pem -o StrictHostKeyChecking=no -r published/* ubuntu@35.176.246.99:/home/ubuntu/todoapp'
-                bat 'ssh -i C:\\Users\\pd550\\Downloads\\ssh-todo-key.pem -o StrictHostKeyChecking=no ubuntu@35.176.246.99 "cd /home/ubuntu/todoapp && nohup dotnet TodoApi.dll > log.txt 2>&1 &"'
+                bat 'dir C:\\JenkinsKeys'
+                bat 'scp -i C:\\JenkinsKeys\\ssh-todo-key.pem -o StrictHostKeyChecking=no -r published/* ubuntu@35.176.246.99:/home/ubuntu/todoapp'
+                bat 'ssh -i C:\\JenkinsKeys\\ssh-todo-key.pem -o StrictHostKeyChecking=no ubuntu@35.176.246.99 "cd /home/ubuntu/todoapp && nohup dotnet TodoApi.dll > log.txt 2>&1 &"'
             }
         }
     }
